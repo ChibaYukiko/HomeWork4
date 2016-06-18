@@ -10,12 +10,12 @@ using namespace std;
 //set <string> s;
 
 map < string, int > vertex; // < vertex, score >
-map < string, std::list<string> > node; // A -> B : < A,B > C -> A, C -> B : <C,[A,B]>
+map < string, list<string> > node; // A -> B : < A,B > C -> A, C -> B : <C,[A,B]>
  
 int main(){
 
   std::ifstream ifs("small_data.txt"); // file open
-  char str[256];
+  string str;
   int ver_num = 0, node_num = 0;
   
   if (ifs.fail()){
@@ -23,41 +23,35 @@ int main(){
     return -1;
   }
   
-  ifs.getline(str, 256 - 1); // vertex count
-  int pos1 = 0;
-  while(str[pos1] != '\0'){
-  ver_num = ver_num * 10 + (int)(str[pos1] - '0');
-  pos1++;
-  }
+  getline(ifs, str); // vertex count
+  ver_num = atoi(str.c_str());
 
   for(int i = 0; i < ver_num; i++){ // give each vertex 100scores
-    ifs.getline(str, 256 - 1);
+    getline(ifs, str);
     vertex.insert(pair<string, int>(str, 100));
     std::cout << str << ":" << vertex[str] << std::endl;
   }
 
-  ifs.getline(str, 256 - 1); //node count
-  int pos2 = 0;
-  while(str[pos2] != '\0'){
-  node_num = node_num * 10 + (int)(str[pos2] - '0');
-  pos2++;
-  }
-  
+  getline(ifs, str); //node count
+  node_num = atoi(str.c_str());
+
   for(int j = 0; j < node_num; j++){
-    ifs.getline(str, 256 - 1);
-    string vertex, node;
-    int pos2 = 0;
-    /*while(str[pos2] != ' '){
-      vertex = vertex + str[pos2];
-      pos2++;
+    string vertex1, vertex2;
+
+    getline(ifs,str,' ');
+    vertex1 = str;
+    std::cout << vertex1 << std::endl;
+
+    getline(ifs,str);
+    vertex2 = str;
+    std::cout << vertex2 << std::endl;
+
+    if(node.find(vertex1) == node.end()){ // key != vertex1
+      
+    }else{ //vertex1 exist
+      
     }
-    pos2++;
-    while(str[pos2] != '\0'){
-      vertex = vertex + str[pos2];
-      pos2++;
-    }
-    node.insert(pair<string,string>(vertex, node));*/
-    std::cout << str << std::endl;
+ 
   }
 
 
