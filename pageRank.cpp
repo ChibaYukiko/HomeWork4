@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
-#include <typeinfo>
 #include <list>
 #include <vector>
 
 using namespace std;
+
+#define SIZE 20
 
 
 class Vertex {
@@ -18,7 +18,8 @@ public:
 };
 
 std::ifstream ifs("small_data.txt"); // file open
-Vertex vertex[20];
+
+Vertex vertex[SIZE];
 
 void shokika(int ver_num){
 
@@ -74,10 +75,33 @@ void insert_neighbor(int edge_num){
     
     vertex[ver].neighbors.push_back(vertex[edge]);
 
-    std::cout << vertex[ver].name << "->" << vertex[ver].neighbors.back().name << std::endl;
+    std::cout << vertex[ver].name << "->" << vertex[ver].neighbors.front().name << std::endl;
 
    }
 
+}
+
+void pageRank(int ver_num){
+
+  for(int i = 0; i < ver_num ; i++){
+
+    int n = vertex[i].neighbors.size();
+    std::cout << vertex[i].score << std::endl;
+    double div_score = vertex[i].score / n;
+
+    for(int j = 0; j < n ; j++){
+      vertex[i].neighbors[j].kari_score += div_score;
+      std::cout << vertex[j].name << " : " << vertex[j].kari_score << std::endl;
+    }
+    
+  }
+
+  for(int k = 0; k < ver_num; k++){
+    vertex[k].score = vertex[k].kari_score;
+    vertex[k].kari_score = 0.0;
+    //std::cout << vertex[k].name << " : " << vertex[k].score << std::endl;
+  }
+  
 }
  
 int main(){
@@ -104,18 +128,10 @@ int main(){
   insert_neighbor(edge_num);
 
 
-  // 点数の計算
-  int score = vertex[j].score / vertex[j].neighbors.size();
-
-  for(int i = 0; i < vertex[j].neighbors.size(); i++){
-    vertex[j].neighbors[i].kari_score += score;
+  for(int i = 0; i < 3; i++){
+    std::cout << i << std::endl;
+    pageRank(ver_num);
+   
   }
-
-  vertex[j].score = vertex[j].kari_score;
-    
-
-  
-  
-  //fclose(ifs);
   return 0;
 }
