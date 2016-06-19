@@ -21,7 +21,7 @@ std::ifstream ifs("small_data.txt"); // file open
 
 Vertex vertex[SIZE];
 
-void shokika(int ver_num){
+void shokika(int ver_num){ // 初期化
 
   string str;
   
@@ -29,12 +29,12 @@ void shokika(int ver_num){
     getline(ifs, str);
     vertex[i].name = str;
     vertex[i].score = 100.0;
-    vertex[i].kari_score = 0;  
+    vertex[i].kari_score = 0.0;
   }
   
 }
 
-int search_vertex(string str,int edge_num){
+int search_vertex(string str,int edge_num){ //頂点を探す->そのindexを返す
 
   int num = 0;
   
@@ -51,7 +51,7 @@ int search_vertex(string str,int edge_num){
 }
 
 
-void insert_neighbor(int edge_num){
+void insert_neighbor(int edge_num){ //　矢印の先を代入
 
   string str;
 
@@ -81,17 +81,18 @@ void insert_neighbor(int edge_num){
 
 }
 
-void pageRank(int ver_num){
+void pageRank(int ver_num){ // 点数配分の計算
 
   for(int i = 0; i < ver_num ; i++){
 
     int n = vertex[i].neighbors.size();
-    std::cout << vertex[i].score << std::endl;
+    //std::cout << vertex[i].score << std::endl;
     double div_score = vertex[i].score / n;
 
     for(int j = 0; j < n ; j++){
-      vertex[i].neighbors[j].kari_score += div_score;
-      std::cout << vertex[j].name << " : " << vertex[j].kari_score << std::endl;
+      vertex[i].neighbors.at(j).kari_score += div_score;
+      std::cout << vertex[i].neighbors.at(j).kari_score << std::endl;
+      //std::cout << vertex[j].name << " : " << vertex[j].kari_score << std::endl;
     }
     
   }
