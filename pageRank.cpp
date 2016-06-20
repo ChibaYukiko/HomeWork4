@@ -7,18 +7,18 @@
 
 using namespace std;
 
-#define SIZE 20
+#define SIZE 26 // 頂点の数
 
 
 class Vertex {
 public:
   string name;  // このVertex
   double score;  // 点数
-  vector<Vertex> neighbors;  // 矢印の先の隣接Vertexたち
-  double kari_score;  // もっと必要な情報があればここに入れる
+  vector<Vertex*> neighbors;  // 矢印の先の隣接Vertexたち
+  double kari_score;  // 与えられた点数を代入する
 };
 
-std::ifstream ifs("small_data.txt"); // file open
+std::ifstream ifs("medium_data.txt"); // file open
 
 Vertex vertex[SIZE];
 
@@ -31,7 +31,6 @@ void shokika(int ver_num){ // 初期化
     vertex[i].name = str;
     vertex[i].score = 100.0;
     vertex[i].kari_score = 0.0;
-    //vertex[i].itr = vertex[i].neighbors.begin();
   }
   
 }
@@ -53,7 +52,7 @@ int search_vertex(string str,int edge_num){ //頂点を探す->そのindexを返
 }
 
 
-void insert_neighbor(int edge_num){ //　矢印の先を代入
+void insert_neighbor(int edge_num){ //　neighbors の代入
 
   string str;
 
@@ -62,25 +61,17 @@ void insert_neighbor(int edge_num){ //　矢印の先を代入
 
     getline(ifs,str,' ');
     vertex1 = str;
-    //std::cout << vertex1 << std::endl;
 
     getline(ifs,str);
     vertex2 = str;
-    //std::cout << vertex2 << std::endl;
 
-
-    int ver = 0, edge = 0 ;
+    int ver = 0, edge = 0 ; // if A -> C then ver: A's index edge: C's index
 
     ver = search_vertex(vertex1, edge_num);
 
     edge = search_vertex(vertex2, edge_num);
     
-    vertex[ver].neighbors.insert(vertex[ver].neighbors.begin(), vertex[edge]);
-
-    //std::cout << vertex[ver].name << "->" << vertex[edge].name << std::endl;
-    
-    //++vertex[ver].itr;
-
+    vertex[ver].neighbors.insert(vertex[ver].neighbors.begin(), &vertex[edge]);
 
    }
 
@@ -90,30 +81,23 @@ void pageRank(int ver_num){ // 点数配分の計算
 
   for(int i = 0; i < ver_num ; i++){
 
-    int n = vertex[i].neighbors.size();
-    //std::cout << n << std::endl;
-    //std::cout << vertex[i].score << std::endl;
-    double div_score = vertex[i].score / n;
-    //std::cout << vertex[i].name << " div_score : " << div_score << std::endl;
-    
+    int n = vertex[i].neighbors.size(); // お隣の頂点の数
+    double div_score = vertex[i].score / n; //自分の今の持ち点をつながっている矢印の数で割った点数
+
     for(int j = 0; j < n ; j++){
-      
-      int index = search_vertex(vertex[i].neighbors.at(j).name, ver_num);
-      vertex[index].kari_score += div_score;
-      
-      //std::cout << vertex[i].neighbors.at(j).kari_score << std::endl;
-      //std::cout << vertex[i].name << " -> " << vertex[i].neighbors[j].name << " : " << vertex[i].neighbors.at(j).kari_score << std::endl;
+      vertex[i].neighbors[j]->kari_score += div_score; // お隣さんに点数を与える
     }
     
   }
 
-  for(int k = 0; k < ver_num; k++){
+  for(int k = 0; k < ver_num; k++){ //与えられた点数を自分の点数として代入してkari_scoreはリセット
     vertex[k].score = vertex[k].kari_score;
     vertex[k].kari_score = 0.0;
     std::cout << vertex[k].name << " : " << vertex[k].score << std::endl;
   }
   
 }
+
  
 int main(){
 
@@ -139,10 +123,23 @@ int main(){
   insert_neighbor(edge_num);
 
 
-  for(int i = 1; i < 13; i++){
+  for(int i = 1; i < 4; i++){ //pageRank を実行
     std::cout << "for文 " << i << " 回目"<< std::endl;
     pageRank(ver_num);
    
   }
+
+  double max_score = vertex[0].score;
+  string max_name = vertex[0].name;
+
+  for(int j = 1; j < ver_num ; j++){ // 最高点を探す
+    if(max_score < vertex[j].score){
+      max_score = vertex[j].score;
+      max_name = vertex[j].name;
+    }
+  }
+
+  std::cout << "Max score is " << max_name << " : " << max_score << std::endl;
+  
   return 0;
 }
