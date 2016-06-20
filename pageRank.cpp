@@ -3,6 +3,7 @@
 #include <fstream>
 #include <list>
 #include <vector>
+#include <stdexcept>
 
 using namespace std;
 
@@ -11,9 +12,9 @@ using namespace std;
 
 class Vertex {
 public:
-  std::string name;  // このVertex
+  string name;  // このVertex
   double score;  // 点数
-  std::vector<Vertex> neighbors;  // 矢印の先の隣接Vertexたち
+  vector<Vertex> neighbors;  // 矢印の先の隣接Vertexたち
   double kari_score;  // もっと必要な情報があればここに入れる
 };
 
@@ -30,6 +31,7 @@ void shokika(int ver_num){ // 初期化
     vertex[i].name = str;
     vertex[i].score = 100.0;
     vertex[i].kari_score = 0.0;
+    //vertex[i].itr = vertex[i].neighbors.begin();
   }
   
 }
@@ -73,9 +75,12 @@ void insert_neighbor(int edge_num){ //　矢印の先を代入
 
     edge = search_vertex(vertex2, edge_num);
     
-    vertex[ver].neighbors.push_back(vertex[edge]);
+    vertex[ver].neighbors.insert(vertex[ver].neighbors.begin(), vertex[edge]);
 
-    std::cout << vertex[ver].name << "->" << vertex[ver].neighbors.front().name << std::endl;
+    //std::cout << vertex[ver].name << "->" << vertex[edge].name << std::endl;
+    
+    //++vertex[ver].itr;
+
 
    }
 
@@ -86,13 +91,18 @@ void pageRank(int ver_num){ // 点数配分の計算
   for(int i = 0; i < ver_num ; i++){
 
     int n = vertex[i].neighbors.size();
+    //std::cout << n << std::endl;
     //std::cout << vertex[i].score << std::endl;
     double div_score = vertex[i].score / n;
-
+    //std::cout << vertex[i].name << " div_score : " << div_score << std::endl;
+    
     for(int j = 0; j < n ; j++){
-      vertex[i].neighbors.at(j).kari_score += div_score;
-      std::cout << vertex[i].neighbors.at(j).kari_score << std::endl;
-      //std::cout << vertex[j].name << " : " << vertex[j].kari_score << std::endl;
+      
+      int index = search_vertex(vertex[i].neighbors.at(j).name, ver_num);
+      vertex[index].kari_score += div_score;
+      
+      //std::cout << vertex[i].neighbors.at(j).kari_score << std::endl;
+      //std::cout << vertex[i].name << " -> " << vertex[i].neighbors[j].name << " : " << vertex[i].neighbors.at(j).kari_score << std::endl;
     }
     
   }
@@ -100,7 +110,7 @@ void pageRank(int ver_num){ // 点数配分の計算
   for(int k = 0; k < ver_num; k++){
     vertex[k].score = vertex[k].kari_score;
     vertex[k].kari_score = 0.0;
-    //std::cout << vertex[k].name << " : " << vertex[k].score << std::endl;
+    std::cout << vertex[k].name << " : " << vertex[k].score << std::endl;
   }
   
 }
@@ -118,7 +128,7 @@ int main(){
   
   getline(ifs, str); // vertex count
   ver_num = atoi(str.c_str());
-  std::cout << ver_num << std::endl;
+  //std::cout << ver_num << std::endl;
 
   shokika(ver_num);
 
@@ -129,8 +139,8 @@ int main(){
   insert_neighbor(edge_num);
 
 
-  for(int i = 0; i < 3; i++){
-    std::cout << i << std::endl;
+  for(int i = 1; i < 5; i++){
+    std::cout << "for文" << i << " 回目"<< std::endl;
     pageRank(ver_num);
    
   }
