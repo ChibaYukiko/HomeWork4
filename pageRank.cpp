@@ -139,8 +139,8 @@ int main(){
   insert_neighbor(edge_num);
 
 
-  for(int i = 1; i < 5; i++){
-    std::cout << "for文" << i << " 回目"<< std::endl;
+  for(int i = 1; i < 13; i++){
+    std::cout << "for文 " << i << " 回目"<< std::endl;
     pageRank(ver_num);
    
   }
