@@ -127,7 +127,7 @@ int main(){
 
 
   for(int i = 0; i < ver_num+; i++){ //pageRank を実行
-    std::cout << "for文 " << i+1 << " 回目"<< std::endl;
+    std::cout << i+1 << " 回目"<< std::endl;
     pageRank(ver_num);
    
   }
