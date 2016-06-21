@@ -117,7 +117,7 @@ int main(){
   getline(ifs, str); // vertex count
   ver_num = atoi(str.c_str());
 
-  shokika(ver_num);　//初期化
+  shokika(ver_num); //初期化
 
 
   getline(ifs, str); //node count
@@ -126,7 +126,7 @@ int main(){
   insert_neighbor(ver_num, edge_num); //お隣さんを追加
 
 
-  for(int i = 1; i < ver_num; i++){ //pageRank を実行
+  for(int i = 0; i < ver_num+; i++){ //pageRank を実行
     std::cout << "for文 " << i+1 << " 回目"<< std::endl;
     pageRank(ver_num);
    
