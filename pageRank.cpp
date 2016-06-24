@@ -89,7 +89,7 @@ void pageRank(int ver_num){ // 点数配分の計算
       for(int j = 0; j < n ; j++){
 	vertex[i].neighbors[j]->given_score += div_score; // お隣さんに点数を与える
       }
-    }else{
+    }else{ //お隣さんがいない
       vertex[i].score = 0;
     }
   }
@@ -126,7 +126,7 @@ int main(){
   insert_neighbor(ver_num, edge_num); //お隣さんを追加
 
 
-  for(int i = 0; i < ver_num ; i++){ //pageRank を実行
+  for(int i = 0; i < 20/*ver_num*/ ; i++){ //pageRank を実行
     std::cout << i+1 << " 回目"<< std::endl;
     pageRank(ver_num);
    
